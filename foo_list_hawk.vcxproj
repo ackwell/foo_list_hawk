@@ -57,7 +57,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\shared</AdditionalLibraryDirectories>
-      <AdditionalDependencies>..\shared\shared.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\shared\shared.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
@@ -95,7 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="playlist_callback.cpp" />
+    <ClCompile Include="playlist.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\pfc\pfc.vcxproj">
