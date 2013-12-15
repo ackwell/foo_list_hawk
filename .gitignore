@@ -1,5 +1,5 @@
 Debug
 ipch
-*.opensdf
+*sdf
 Release
 test
