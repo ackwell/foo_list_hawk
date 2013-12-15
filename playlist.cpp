@@ -22,17 +22,28 @@ bool HawkPlaylistCallback::check_duplicate(t_size p_index_1, t_size p_index_2) {
 
 	static_api_ptr_t<playlist_manager> pm;
 	
-	// Get the two lists, and sort them both in the same way (so comparison is bettererer)
+	// Get the two lists, sort second for binary searching
 	metadb_handle_list items_1, items_2;
 	pm->playlist_get_all_items(p_index_1, items_1);
 	pm->playlist_get_all_items(p_index_2, items_2);
-	items_1.sort();
-	items_2.sort();
 
-	// Loop list 1
-	items_1.for_each([=](metadb_handle_ptr item){
-		popup_message::g_show(item->get_path(), "stuff");
+	int matches;
+	items_1.for_each([&](metadb_handle_ptr item_1){
+		bool dupe = in_item_array(item_1, items_2);
+		if (dupe) { popup_message::g_show(item_1->get_path(), "dupe"); }
 	});
 
 	return false;
+}
+
+bool HawkPlaylistCallback::in_item_array(metadb_handle_ptr needle, metadb_handle_list &haystack) {
+	bool out = false;
+	// I should probably do something a bit better than a linear search but fukkit I'm lazy.
+	haystack.for_each([&](metadb_handle_ptr item){
+		if (item == needle) {
+			out = true;
+			return;
+		}
+	});
+	return out;
 }
