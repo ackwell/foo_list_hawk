@@ -34,8 +34,8 @@ bool HawkPlaylistCallback::check_duplicate(t_size p_index_1, t_size p_index_2) {
 	});
 
 	double ratio = matches / (items_1.get_size() + items_2.get_size() - matches);
-	popup_message::g_show(pfc::format_float(ratio), "Similarity");
-
+	double target = cfg_ratio_cutoff / 100.f;
+	if (ratio > target) { return true; }
 	return false;
 }
 

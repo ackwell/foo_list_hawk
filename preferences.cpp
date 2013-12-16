@@ -8,7 +8,7 @@ enum {
 	default_cfg_ratio_cutoff = 100
 };
 
-static cfg_uint cfg_ratio_cutoff(guid_cfg_ratio_cutoff, default_cfg_ratio_cutoff);
+cfg_uint cfg_ratio_cutoff(guid_cfg_ratio_cutoff, default_cfg_ratio_cutoff);
 
 t_uint32 HawkPreferences::get_state() {
 	t_uint32 state = preferences_state::resettable;
