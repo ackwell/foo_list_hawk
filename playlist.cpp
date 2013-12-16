@@ -4,14 +4,29 @@
 void HawkPlaylistCallback::on_playlist_created(t_size p_index, const char *p_name, t_size p_name_len) {
 	in_main_thread([=](){
 		static_api_ptr_t<playlist_manager> pm;
+		t_size new_index = p_index;
 
 		// Loop over the current playlists, check if dupe
-		for (t_size i = 0; i < pm->get_playlist_count(); i++) {
-			bool is_duplicate = check_duplicate(i, p_index);
+		for (t_size old_index = 0; old_index < pm->get_playlist_count(); old_index++) {
+			bool is_duplicate = check_duplicate(old_index, new_index);
 
 			if (is_duplicate) {
-				// Duplicate, delete the old copy.
-				pm->remove_playlist(i);
+				// Duplicate. Check if the old one is playing.
+				t_size playing = pm->get_playing_playlist();
+
+				// Old playlist is playing, not safe to toss.
+				// Instead, toss the new one, and switch active to the old.
+				if (old_index == playing) {
+					pm->remove_playlist(new_index);
+					new_index = old_index;
+					pm->set_active_playlist(new_index);
+				}
+
+				// Otherwise, safe to toss old one
+				// Would just always toss new, but would end up tossing playlist changes, which I don't want.
+				else {
+					pm->remove_playlist(old_index);
+				}
 			}
 		}
 	});
