@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "resource.h"
+#include "preferences.h"
 
 // {74C09DBD-7D06-40FE-B167-B1286740D26A}
 static const GUID guid_cfg_ratio_cutoff = { 0x74c09dbd, 0x7d06, 0x40fe, { 0xb1, 0x67, 0xb1, 0x28, 0x67, 0x40, 0xd2, 0x6a } };
@@ -8,48 +8,39 @@ enum {
 	default_cfg_ratio_cutoff = 100
 };
 
-static cfg_uint cfg_radio_cutoff(guid_cfg_ratio_cutoff, default_cfg_ratio_cutoff);
-
-class HawkPreferences : public CDialogImpl<HawkPreferences>, public preferences_page_instance {
-public:
-	// Constructor
-	HawkPreferences(preferences_page_callback::ptr callback) : m_callback(callback) {}
-
-	// Resource ID
-	enum {IDD = IDD_HAWKPREFERENCES};
-
-	// Required methods
-	t_uint32 get_state();
-	void apply();
-	void reset();
-
-	// WTL message map
-	BEGIN_MSG_MAP(HawkPreferences)
-	END_MSG_MAP()
-
-private:
-	const preferences_page_callback::ptr m_callback;
-};
+static cfg_uint cfg_ratio_cutoff(guid_cfg_ratio_cutoff, default_cfg_ratio_cutoff);
 
 t_uint32 HawkPreferences::get_state() {
-	return 0;
+	t_uint32 state = preferences_state::resettable;
+	if (has_changed()) state |= preferences_state::changed;
+	return state;
 }
 
 void HawkPreferences::apply() {
+	cfg_ratio_cutoff = GetDlgItemInt(IDC_RATIO_CUTOFF, NULL, FALSE);
+	// Limit 0 - 100
+	cfg_ratio_cutoff = min(100, max(0, cfg_ratio_cutoff));
+	SetDlgItemInt(IDC_RATIO_CUTOFF, cfg_ratio_cutoff, FALSE);
+	on_changed();
 }
 
 void HawkPreferences::reset() {
+	SetDlgItemInt(IDC_RATIO_CUTOFF, default_cfg_ratio_cutoff, FALSE);
 }
 
-// Handle instanciation of the preferences page
-class hawk_preferences_page : public preferences_page_impl<HawkPreferences> {
-public:
-	const char * get_name() { return "List Hawk"; }
-	GUID get_guid() {
-		// {F24A7143-AC9B-4394-AC01-38BD023EFC55}
-		static const GUID guid = { 0xf24a7143, 0xac9b, 0x4394, { 0xac, 0x1, 0x38, 0xbd, 0x2, 0x3e, 0xfc, 0x55 } };
-		return guid;
-	}
-	GUID get_parent_guid() { return guid_media_library; }
-};
-static preferences_page_factory_t<hawk_preferences_page> g_hawk_preferences_page_factory;
+BOOL HawkPreferences::on_dialog_init(CWindow, LPARAM) {
+	SetDlgItemInt(IDC_RATIO_CUTOFF, cfg_ratio_cutoff, FALSE);
+	return FALSE;
+}
+
+void HawkPreferences::on_edit_change(UINT, int, CWindow) {
+	on_changed();
+}
+
+bool HawkPreferences::has_changed() {
+	return GetDlgItemInt(IDC_RATIO_CUTOFF, NULL, FALSE) != cfg_ratio_cutoff;
+}
+
+void HawkPreferences::on_changed() {
+	m_callback->on_state_changed();
+}

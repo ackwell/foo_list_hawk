@@ -92,6 +92,7 @@
   <ItemGroup>
     <ClInclude Include="helpers.h" />
     <ClInclude Include="playlist.h" />
+    <ClInclude Include="preferences.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
@@ -120,4 +121,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="foo_list_hawk.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>
