@@ -91,6 +91,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="helpers.h" />
+    <ClInclude Include="playlist.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
