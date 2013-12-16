@@ -10,7 +10,8 @@ void HawkPlaylistCallback::on_playlist_created(t_size p_index, const char *p_nam
 			bool is_duplicate = check_duplicate(i, p_index);
 
 			if (is_duplicate) {
-				popup_message::g_show("Duplicate found", "");
+				// Duplicate, delete the old copy.
+				pm->remove_playlist(i);
 			}
 		}
 	});
@@ -35,7 +36,7 @@ bool HawkPlaylistCallback::check_duplicate(t_size p_index_1, t_size p_index_2) {
 
 	double ratio = matches / (items_1.get_size() + items_2.get_size() - matches);
 	double target = cfg_ratio_cutoff / 100.f;
-	if (ratio > target) { return true; }
+	if (ratio >= target) { return true; }
 	return false;
 }
 

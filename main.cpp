@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 // Set up foobar shit
-DECLARE_COMPONENT_VERSION("Playlist Hawk", "0.1", "Watches playlists to prevent duplicates.");
+DECLARE_COMPONENT_VERSION("Playlist Hawk", "1.0.0", "Watches playlists to prevent duplicates.");
 VALIDATE_COMPONENT_FILENAME("foo_list_hawk.dll");
 
 // An initquit to handle setting everything else up
