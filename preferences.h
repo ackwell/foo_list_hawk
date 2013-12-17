@@ -16,6 +16,8 @@ public:
 	// WTL message map
 	BEGIN_MSG_MAP(HawkPreferences)
 		MSG_WM_INITDIALOG(on_dialog_init)
+		COMMAND_HANDLER_EX(IDC_RATIO_CUTOFF, EN_CHANGE, on_edit_change)
+		COMMAND_HANDLER_EX(IDC_MAX_PLAYLISTS, EN_CHANGE, on_edit_change)
 	END_MSG_MAP()
 
 private:

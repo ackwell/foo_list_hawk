@@ -5,5 +5,5 @@ public:
 
 private:
 	bool check_duplicate(t_size p_index_1, t_size p_index_2);
-	bool in_item_array(metadb_handle_ptr needle, metadb_handle_list &haystack);
+	bool in_item_array(metadb_handle_ptr needle, metadb_handle_list haystack);
 };
